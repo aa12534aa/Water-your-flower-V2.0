@@ -2,7 +2,7 @@ export let flowers = JSON.parse(localStorage.getItem('flowers')) || [
     {
         id: 'id1',
         img: 'zdj/albacja.JPG',
-        time: 0.0005,
+        time: 3,
         waterDate: new Date(),
         name: 'albacja jedwabista',
         waterTxt: 'When the background color will turn red water your flower!'
