@@ -16,6 +16,13 @@ body {
     background-color: rgb(17, 169, 17);
 }
 
+.version-txt {
+    position: absolute;
+    bottom: 0px;
+    right: 5px;
+    color: rgb(50, 50, 50);
+}
+
 .title {
     text-align: center;
     font-size: 35px;
