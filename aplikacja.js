@@ -118,6 +118,12 @@ setInterval(() => {
                 element.waterTxt = 'Your flower needs water!!';
                 document.querySelector(`.js-water-text-${element.id}`)
                     .innerHTML = 'Your flower needs water!!';
+            } else if (backgroundColor.classList && backgroundColorup.classList) {
+                backgroundColor.classList.remove('waterless');
+                backgroundColorup.classList.remove('waterless');
+                element.waterTxt = 'When the background color will turn red water your flower!';
+                document.querySelector(`.js-water-text-${element.id}`)
+                    .innerHTML = 'When the background color will turn red water your flower!';
             }
         })
     }
