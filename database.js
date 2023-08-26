@@ -1,58 +1,34 @@
-export let flowers = JSON.parse(localStorage.getItem('flowers')) || [
-    {
-        id: 'id1',
-        img: 'zdj/albacja.JPG',
-        time: 3,
-        waterDate: new Date(),
-        name: 'albacja jedwabista',
-        waterTxt: 'When the background color will turn red water your flower!'
-    },    
-    {
-        id: 'id2',
-        img: 'zdj/habanero.JPG',
-        time: 3,
-        waterDate: new Date(),
-        name: 'habanero chocolate',
-        waterTxt: 'When the background color will turn red water your flower!'
-    },
-    {
-        id: 'id3',
-        img: 'zdj/mango.JPG',
-        time: 3,
-        waterDate: new Date(),
-        name: 'mango',
-        waterTxt: 'When the background color will turn red water your flower!'
-    },
-    {
-        id: 'id4',
-        img: 'zdj/oliwka.JPG',
-        time: 2,
-        waterDate: new Date(),
-        name: 'oliwka europejska',
-        waterTxt: 'When the background color will turn red water your flower!'
-    },
-    {
-        id: 'id5',
-        img: 'zdj/palma.JPG',
-        time: 2,
-        waterDate: new Date(),
-        name: 'palma kokosowa',
-        waterTxt: 'When the background color will turn red water your flower!'
-    },
-    {
-        id: 'id6',
-        img: 'zdj/pomidor.JPG',
-        time: 2,
-        waterDate: new Date(),
-        name: 'pomidor',
-        waterTxt: 'When the background color will turn red water your flower!'
-    },
-    {
-        id: 'id7',
-        img: 'zdj/truskawka.JPG',
-        time: 2,
-        waterDate: new Date(),
-        name: 'truskawka',
-        waterTxt: 'When the background color will turn red water your flower!'
+import { startSite } from "./aplikacja.js";
+export let flowers = JSON.parse(localStorage.getItem('flowers')) || [];
+
+// Funkcja obsługująca dodawanie zdjęć przez użytkownika
+document.querySelector('.js-add-flower-button').addEventListener('click', () => {
+    let uploadedImage;
+    let fileInput = document.querySelector('.js-photo-flower');
+    let file = fileInput.files[0];
+    let flowerName = document.querySelector('.js-name-flower').value;
+    let flowerDays = Number(document.querySelector('.js-days-flower').value);
+
+    // Jeśli użytkownik wybrał plik
+    if (file) {
+        let reader = new FileReader();
+
+        reader.onload = function(e) {
+            uploadedImage = e.target.result;
+
+            flowers.push({
+                id: `id${flowers.length + 1}`,
+                waterDate: new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate()),
+                name: flowerName,
+                time: flowerDays,
+                waterTxt: 'When the background color will turn red water your flower!',
+                img: uploadedImage
+            });
+            localStorage.setItem('flowers', JSON.stringify(flowers));
+
+            startSite();
+        };
+
+        reader.readAsDataURL(file); // Odczytaj plik jako URL (Base64)
     }
-]
+});
