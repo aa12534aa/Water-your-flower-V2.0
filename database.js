@@ -1,4 +1,3 @@
-localStorage.clear();
 import { startSite } from "./aplikacja.js";
 export let flowers = JSON.parse(localStorage.getItem('flowers')) || [];
 
