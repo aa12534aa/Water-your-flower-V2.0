@@ -1,3 +1,4 @@
+localStorage.clear();
 import { startSite } from "./aplikacja.js";
 export let flowers = JSON.parse(localStorage.getItem('flowers')) || [];
 
@@ -10,7 +11,7 @@ document.querySelector('.js-add-flower-button').addEventListener('click', () => 
     let flowerDays = Number(document.querySelector('.js-days-flower').value);
 
     // Jeśli użytkownik wybrał plik
-    if (file) {
+    if (file && flowerName && flowerDays) {
         let reader = new FileReader();
 
         reader.onload = function(e) {
