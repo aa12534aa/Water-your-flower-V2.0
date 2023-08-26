@@ -3,6 +3,7 @@ import { flowers } from "./database.js";
 let seeingFlowers = [];
 //
 
+export function startSite() {
 // ustawianie zooma na stronie
 function setZoomTo90Percent() {
     const bodyElement = document.body;
@@ -15,11 +16,11 @@ window.onload = function () {
 //
 
 // wyswitlanie HTML na stronie
-let HTML = ''
+let HTML = '';
 flowers.forEach((flower) => {
     HTML += htmlReturn(flower);
     seeingFlowers.push(flower.id);
-})
+});
 document.querySelector('.js-main-grid')
     .innerHTML = HTML;
 //
@@ -81,6 +82,24 @@ setInterval(() => {
         });
     //
     
+    // guzik do usuwania rosliny
+    document.querySelectorAll('.js-delete-button')
+        .forEach((button) => {
+            button.addEventListener('click', () => {
+                const { flowerId } = button.dataset;
+                let indexNum = Number(flowerId.substring(2));
+                flowers.splice(indexNum - 1, 1);
+
+                let i = 1;
+                flowers.forEach((flower) => {
+                    flower.id = `id${i}`;
+                    i++;
+                });
+                startSite();
+            });
+        });
+    //
+    
     // guzik oraz funkcja wywolanie enterem do znalezienia danej rosliny
     document.querySelector('.js-button-search')
         .addEventListener('click', () => {
@@ -103,27 +122,29 @@ setInterval(() => {
     // funkcja sprawdzajaca czy nalezy podlac rosline
     function water() {
         flowers.forEach(element => {
-            const backgroundColor = document.querySelector(`.js-flowers-${element.id}`);
+            if (seeingFlowers.includes(element.id)) {
+                const backgroundColor = document.querySelector(`.js-flowers-${element.id}`);
 
-            const backgroundColorup = document.querySelector(`.js-flowers-name-${element.id}`);
+                const backgroundColorup = document.querySelector(`.js-flowers-name-${element.id}`);
 
-            const waterDate = new Date(element.waterDate);
-            const todayDate = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());
-            
-            const secondsdif = (todayDate - waterDate) / 1000;
-            
-            if (element.time * 60 * 60 *24 <= secondsdif && seeingFlowers.includes(element.id)) {
-                backgroundColor.classList.add('waterless');
-                backgroundColorup.classList.add('waterless');
-                element.waterTxt = 'Your flower needs water!!';
-                document.querySelector(`.js-water-text-${element.id}`)
-                    .innerHTML = 'Your flower needs water!!';
-            } else if (backgroundColor.classList && backgroundColorup.classList) {
-                backgroundColor.classList.remove('waterless');
-                backgroundColorup.classList.remove('waterless');
-                element.waterTxt = 'When the background color will turn red water your flower!';
-                document.querySelector(`.js-water-text-${element.id}`)
-                    .innerHTML = 'When the background color will turn red water your flower!';
+                const waterDate = new Date(element.waterDate);
+                const todayDate = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());
+                
+                const secondsdif = (todayDate - waterDate) / 1000;
+                
+                if (element.time * 60 * 60 *24 <= secondsdif) {
+                    backgroundColor.classList.add('waterless');
+                    backgroundColorup.classList.add('waterless');
+                    element.waterTxt = 'Your flower needs water!!';
+                    document.querySelector(`.js-water-text-${element.id}`)
+                        .innerHTML = 'Your flower needs water!!';
+                } else if (backgroundColor.classList && backgroundColorup.classList) {
+                    backgroundColor.classList.remove('waterless');
+                    backgroundColorup.classList.remove('waterless');
+                    element.waterTxt = 'When the background color will turn red water your flower!';
+                    document.querySelector(`.js-water-text-${element.id}`)
+                        .innerHTML = 'When the background color will turn red water your flower!';
+                }
             }
         })
     }
@@ -136,6 +157,7 @@ setInterval(() => {
 
         if (!flowerName) {
             HTML = ''
+            seeingFlowers = [];
             flowers.forEach((flower) => {
                 HTML += htmlReturn(flower);
                 seeingFlowers.push(flower.id);
@@ -160,7 +182,15 @@ setInterval(() => {
         `
         <div class="flower-container">
             <div class="flower-name js-flowers-name-${flower.id}">
-                ${flower.name}
+                <div class="flower-name-txt">
+                    ${flower.name}
+                </div>
+                <button class="delete-button js-delete-button" data-flower-id="${flower.id}">
+                    X
+                </button>
+                <div class="delete-txt">
+                    Delete your flower
+                </div>
             </div>
             <img class="img-flower" src="${flower.img}">
             <div class="flower-widgets js-flowers-${flower.id}">
@@ -190,3 +220,5 @@ setInterval(() => {
 // wyswietlanie danych o kwiatach
 console.log(flowers);
 //
+}
+startSite();
